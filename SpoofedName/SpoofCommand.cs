@@ -16,7 +16,7 @@ public class SpoofCommand : ICommand, IUsageProvider
         var _jsonSaving = SpoofPlugin._jsonSaving;
         
         var cSender = Player.Get(sender);
-        if (!sender.CheckPermission(PlayerPermissions.PlayersManagement))
+        if (!sender.CheckPermission(PlayerPermissions.KickingAndShortTermBanning))
         {
             response = "You don't have permission to use this command.";
             return false;
