@@ -12,12 +12,14 @@ public class SpoofPlugin : Plugin
     public override Version Version { get; } = new Version(1, 0, 0);
     public override Version RequiredApiVersion { get; } = new (LabApiProperties.CompiledVersion);
 
+    public static JsonSaving? _jsonSaving;
     private Harmony? _harmony;
     
     public override void Enable()
     {
         _harmony = new  Harmony("acecrum.spoofedname");
         _harmony.PatchAll();
+        _jsonSaving = new JsonSaving("SpoofedNames");
     }
 
     public override void Disable()

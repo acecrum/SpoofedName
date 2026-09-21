@@ -7,9 +7,15 @@ public class HarmonyPatch
 {
 
     [HarmonyPrefix]
-    public static void prefix(ref string value)
+    public static void prefix(NicknameSync __instance, ref string? value)
     {
-        value = "Spoofed Name";
+        var hub = __instance.gameObject.GetComponent<ReferenceHub>();
+
+        if (hub == null) return;
+
+        var userId = hub.authManager.UserId;
+        
+        if (SpoofPlugin._jsonSaving?.TryGet(userId, out var spoofName) == true)
+            value = spoofName;
     }
-    
 }

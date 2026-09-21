@@ -10,10 +10,12 @@ public class SpoofCommand : ICommand, IUsageProvider
     public string[] Aliases => [];
     public string Description => "Spoofs the the executor's username";
     public string[] Usage => ["Name"];
-    
+
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        Player? cSender = Player.Get(sender);
+        var _jsonSaving = SpoofPlugin._jsonSaving;
+        
+        var cSender = Player.Get(sender);
         if (!sender.CheckPermission(PlayerPermissions.PlayersManagement))
         {
             response = "You don't have permission to use this command.";
@@ -22,8 +24,10 @@ public class SpoofCommand : ICommand, IUsageProvider
         switch (arguments.Count)
         {
             case 0:
-                response = "spoof [Name]";
-                return false;
+                if (cSender?.UserId != null) _jsonSaving?.Delete(cSender.UserId);
+
+                response = "Spoof removed, rejoin for the name change to occur.";
+                return true;
             case > 1:
                 response = "Only one argument is allowed";
                 return false;
@@ -31,9 +35,9 @@ public class SpoofCommand : ICommand, IUsageProvider
         var spoofName = arguments.ElementAt(0);
 
         cSender?.ReferenceHub.nicknameSync.MyNick = spoofName;
-        
-        //CentralAuth.PlayerAuthenticationManager
-        
+
+        if (cSender != null) _jsonSaving?.Save(cSender, spoofName);
+
         response = $"Spoofed to {spoofName}, rejoin for the name change to occur.";
         return true;
     }
