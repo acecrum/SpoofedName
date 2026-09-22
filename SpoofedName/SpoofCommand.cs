@@ -1,9 +1,10 @@
 using CommandSystem;
+using LabApi.Features.Permissions;
 using LabApi.Features.Wrappers;
 
 namespace SpoofedName;
 
-[CommandHandler(typeof(RemoteAdminCommandHandler))]
+[CommandHandler(typeof(ClientCommandHandler))]
 public class SpoofCommand : ICommand, IUsageProvider
 {
     public string Command => "spoof";
@@ -16,7 +17,7 @@ public class SpoofCommand : ICommand, IUsageProvider
         var _jsonSaving = SpoofPlugin._jsonSaving;
         
         var cSender = Player.Get(sender);
-        if (!sender.CheckPermission(PlayerPermissions.KickingAndShortTermBanning))
+        if (!sender.HasPermission("acecrum.spoofname.spoof"))
         {
             response = "You don't have permission to use this command.";
             return false;
@@ -29,8 +30,6 @@ public class SpoofCommand : ICommand, IUsageProvider
                 return true;
         }
         var spoofName = string.Join(" ", arguments.Skip(0));
-
-        cSender?.ReferenceHub.nicknameSync.MyNick = spoofName;
 
         if (cSender != null) _jsonSaving?.Save(cSender, spoofName);
         
