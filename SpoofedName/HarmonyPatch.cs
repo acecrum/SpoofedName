@@ -5,9 +5,7 @@ namespace SpoofedName;
 [HarmonyLib.HarmonyPatch(typeof(NicknameSync), nameof(NicknameSync.MyNick), MethodType.Setter)]
 public class HarmonyPatch
 {
-
-    [HarmonyPrefix]
-    public static void prefix(NicknameSync __instance, ref string? value)
+    public static void Prefix(NicknameSync __instance, ref string? value)
     {
         var hub = __instance.gameObject.GetComponent<ReferenceHub>();
 
